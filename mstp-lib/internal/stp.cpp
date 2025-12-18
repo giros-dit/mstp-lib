@@ -384,6 +384,23 @@ void STP_OnBpduReceived (STP_BRIDGE* bridge, unsigned int portIndex, const unsig
 		{
 			LOG (bridge, -1, -1, "{T}: BPDU received on Port {D}:\r\n", timestamp, 1 + portIndex);
 
+			/* If the port is administratively forced to be an edge port,
+			   BPDUs received on that port should be discarded to avoid
+			   root hijacking attacks. An end terminal could send a fake BPDU
+			   with a lower bridge ID so that it becomes the root bridge of the
+			   network topology and, hence, traffic could be intercepted.
+			   The BPDU is discarded only when AdminEdge is true and AutoEdge is disabled.
+			   If AutoEdge is enabled, the library will process the BPDU so that
+			   automatic edge detection is still possible. */
+			PORT* port = bridge->ports[portIndex];
+			if (port->AdminEdge && !port->AutoEdge)
+			{
+				LOG (bridge, -1, -1, "{T}: BPDU received on Port {D} - discarding it since port is administratively forced to be an edge port.\r\n", timestamp, 1 + portIndex);
+				LOG (bridge, -1, -1, "------------------------------------\r\n");
+				FLUSH_LOG (bridge);
+				return;
+			}
+
 			enum VALIDATED_BPDU_TYPE type = STP_GetValidatedBpduType (bridge->ForceProtocolVersion, bpdu, bpduSize);
 			switch (type)
 			{
