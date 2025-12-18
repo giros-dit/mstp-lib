@@ -395,7 +395,7 @@ void STP_OnBpduReceived (STP_BRIDGE* bridge, unsigned int portIndex, const unsig
 			PORT* port = bridge->ports[portIndex];
 			if (port->AdminEdge && !port->AutoEdge)
 			{
-				LOG (bridge, -1, -1, "{T}: BPDU received on Port {D} - discarding it since port is administratively forced to be an edge port.\r\n", timestamp, 1 + portIndex);
+				LOG (bridge, -1, -1, "{T}: Discarding BPDU since port is administratively forced to be an edge port.\r\n", timestamp, 1 + portIndex);
 				LOG (bridge, -1, -1, "------------------------------------\r\n");
 				FLUSH_LOG (bridge);
 				return;
