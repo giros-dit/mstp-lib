@@ -16,7 +16,6 @@ static BRIDGE_ID ExtractBpduRootId (const MSTP_BPDU* bpdu)
 	return bpdu->cistRootId;
 }
 
-
 static bool IsObsoleteSelfRootForTree (STP_BRIDGE* bridge, unsigned int treeIndex, const BRIDGE_ID& announcedRoot, unsigned int timestamp)
 {
     if (!bridge->hasPrevBridgeIdPerTree[treeIndex])
@@ -31,7 +30,6 @@ static bool IsObsoleteSelfRootForTree (STP_BRIDGE* bridge, unsigned int treeInde
 
     return (announcedRoot == myPrev) && !(myNow == myPrev);
 }
-
 
 static bool IsObsoleteSelfRootBpdu (STP_BRIDGE* bridge,
 									enum VALIDATED_BPDU_TYPE type,
